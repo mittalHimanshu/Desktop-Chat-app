@@ -1,0 +1,8 @@
+<input [(ngModel)]="message" (keyup.enter)="sendMessage()" />
+<button (click)="sendMessage()">Send</button>
+
+<div *ngFor='let message of messages'>
+  {{ message }}
+</div>
+
+<router-outlet></router-outlet>
