@@ -11,8 +11,8 @@ const app = express()
 app.use(
     session({
         secret: 'himanshu-is-awesome',
-        resave: true,
-        saveUninitialized: true
+        resave: false,
+        saveUninitialized: false
     })
 )
 app.use(passport.initialize())
@@ -20,10 +20,10 @@ app.use(passport.session())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use('/api', routes)
-app.get('*', (req, res) => {
-    let url = path.resolve(__dirname, '../client', 'src', 'index.html')
-    res.sendFile(url)
-})
+// app.get('*', (req, res) => {
+//     let url = path.resolve(__dirname, '../client/dist', 'client', 'index.html')
+//     res.sendFile(url)
+// })
 
 require('./config/passport')(passport)
 

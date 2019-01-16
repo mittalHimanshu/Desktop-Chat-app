@@ -13,4 +13,10 @@ export class AuthService {
 
   public loginUser = userData =>
     this._http.post('/api/login', userData)
+
+  public isLoggedIn = () => 
+    this._http.get('/api/isLoggedIn')
+
+  public logoutUser = () =>
+    this._http.get('/api/logout')
 }

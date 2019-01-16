@@ -14,13 +14,17 @@ export class LoginComponent implements OnInit {
   constructor(private _auth: AuthService, private _router: Router) { }
 
   ngOnInit() {
+    this._auth.isLoggedIn().subscribe(
+      res => this._router.navigate(['/chats']),
+      err => console.log(err)
+    )
   }
 
   loginUser = () => {
     this._auth.loginUser(this.loginData)
       .subscribe(
-        res => console.log(res),
-        err => console.log(err.message)
+        res => this._router.navigate(['/chats']),
+        err => console.log(err)
       )
   }
 
