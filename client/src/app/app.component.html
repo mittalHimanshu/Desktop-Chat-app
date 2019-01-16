@@ -1,8 +1,5 @@
-<input [(ngModel)]="message" (keyup.enter)="sendMessage()" />
-<button (click)="sendMessage()">Send</button>
-
-<div *ngFor='let message of messages'>
-  {{ message }}
-</div>
+<input type="text" name="username" [(ngModel)]="username"/>
+<input type="text" name="password" [(ngModel)]="password"/>
+<button (click)="registersUser()">Submit</button>
 
 <router-outlet></router-outlet>

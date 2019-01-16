@@ -9,22 +9,24 @@ import { Component, OnInit } from '@angular/core';
 
 export class AppComponent implements OnInit {
 
-  message: string
-  messages: string[] = []
+  username: string
+  password: string
 
-  constructor(private _chatService: ChatService) { }
+  ngOnInit(){}
+  // message: string
+  // messages: string[] = []
 
-  ngOnInit() {
-    this._chatService.getMessages().subscribe(message => {
-      this.messages.push(message)
-    })
-  }
+  // constructor(private _chatService: ChatService) { }
 
-  sendMessage = () => {
-    this._chatService.sendMessage(this.message)
-    this.message = ''
-  }
+  // ngOnInit() {
+  //   this._chatService.getMessages().subscribe(message => {
+  //     this.messages.push(message)
+  //   })
+  // }
 
-
+  // sendMessage = () => {
+  //   this._chatService.sendMessage(this.message)
+  //   this.message = ''
+  // }
 
 }

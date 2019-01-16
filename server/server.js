@@ -1,6 +1,31 @@
-var express = require('express')
-var socket = require('socket.io')
+const express = require('express')
+const socket = require('socket.io')
+const mongoose = require('mongoose')
+const passport = require('passport')
+const session = require('express-session')
+const bodyParser = require('body-parser')
+const routes = require('./routes')
 const app = express()
+
+app.use(
+    session({
+        secret: 'himanshu-is-awesome',
+        resave: true,
+        saveUninitialized: true
+    })
+)
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
+app.use('/', routes)
+
+require('./config/passport')(passport)
+
+const db = require('./config/mongoKey').mongoURI
+mongoose.connect(db, { useNewUrlParser: true })
+    .then(console.log('MongoDB connected'))
+    .catch(err => console.log('Error ', err.message))
 
 const port = process.env.port || 5000
 
