@@ -5,6 +5,7 @@ const passport = require('passport')
 const session = require('express-session')
 const bodyParser = require('body-parser')
 const routes = require('./routes')
+const path = require('path')
 const app = express()
 
 app.use(
@@ -18,7 +19,11 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use('/', routes)
+app.use('/api', routes)
+app.get('*', (req, res) => {
+    let url = path.resolve(__dirname, '../client', 'src', 'index.html')
+    res.sendFile(url)
+})
 
 require('./config/passport')(passport)
 

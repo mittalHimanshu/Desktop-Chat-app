@@ -1,5 +1,4 @@
-import { ChatService } from './chat.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -7,12 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent implements OnInit {
+export class AppComponent {
 
-  username: string
-  password: string
+  constructor() { }
 
-  ngOnInit(){}
+}
+
+
+
+
   // message: string
   // messages: string[] = []
 
@@ -28,5 +30,3 @@ export class AppComponent implements OnInit {
   //   this._chatService.sendMessage(this.message)
   //   this.message = ''
   // }
-
-}
