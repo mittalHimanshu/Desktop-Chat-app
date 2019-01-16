@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
       )
   }
 
-  registerUser = () => {
+  navigateToRegister = () => {
     this._router.navigate(['/register'])
   }
 
