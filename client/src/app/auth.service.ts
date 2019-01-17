@@ -19,4 +19,8 @@ export class AuthService {
 
   public logoutUser = () =>
     this._http.get('/api/logout')
+
+  public getInitialUsers = () =>
+    this._http.get('/user')
+    
 }

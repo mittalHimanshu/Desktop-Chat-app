@@ -1,5 +1,19 @@
-<p>
-  chats works!
-</p>
+{{username}}
 
+<input type="text" [(ngModel)]="message" (input)="handleTyping()"> <br /><br />
+<button (click)="sendMessage()">Send</button>
+
+<div *ngFor="let message of messages">
+  {{message}}
+</div>
+
+<br /><br />
+
+<div *ngFor="let user of filterUsers()" 
+    [style.background] = "user.is_active ? 'yellow' : ''" 
+    [style.color]=" user.is_typing ? 'green' : ''">
+  {{user.username}}
+</div>
+
+<br /><br />
 <button (click)="logoutUser()">Logout</button>

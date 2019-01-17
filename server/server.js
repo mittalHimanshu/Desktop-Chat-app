@@ -5,6 +5,7 @@ const passport = require('passport')
 const session = require('express-session')
 const bodyParser = require('body-parser')
 const routes = require('./routes')
+const userRoutes = require('./routes/user')
 const path = require('path')
 const app = express()
 
@@ -20,6 +21,7 @@ app.use(passport.session())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use('/api', routes)
+app.use('/user', userRoutes)
 // app.get('*', (req, res) => {
 //     let url = path.resolve(__dirname, '../client/dist', 'client', 'index.html')
 //     res.sendFile(url)
@@ -38,5 +40,5 @@ const server = app.listen(port, console.log('Server Started'))
 
 const io = module.exports = socket(server)
 
-const SocketManager = require('./SocketManager')
+const { SocketManager } = require('./SocketManager')
 io.on('connection', SocketManager)

@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 
 const UserSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     username: {
         type: String,
         require: true
@@ -9,7 +10,9 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         require: true
-    }
+    },
+    is_active: { type: Boolean, default: false },
+    is_typing: { type: Boolean, default: false }
 })
 
 UserSchema.pre('save', function(next) {

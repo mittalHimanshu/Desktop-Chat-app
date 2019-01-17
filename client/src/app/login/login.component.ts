@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this._auth.isLoggedIn().subscribe(
-      res => this._router.navigate(['/chats']),
+      username => this._router.navigate(['/chats'], { queryParams: {username}}),
       err => console.log(err)
     )
   }
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
   loginUser = () => {
     this._auth.loginUser(this.loginData)
       .subscribe(
-        res => this._router.navigate(['/chats']),
+        username => this._router.navigate(['/chats'], { queryParams: {username}}),
         err => console.log(err)
       )
   }
