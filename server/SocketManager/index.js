@@ -2,8 +2,10 @@ const io = require('../server')
 const { updateTypingStatus,
     updateOnlineStatus,
     getUserId,
-    // createMessage,
-    createRoom
+    createMessage,
+    createRoom,
+    updateRoom,
+    getRoomId
 } = require('../factory')
 
 module.exports.SocketManager = socket => {
@@ -15,7 +17,11 @@ module.exports.SocketManager = socket => {
     socket.on('new-message', payload => {
         const { username } = socket
         const { message, room } = payload
-        // const message = createMessage({username, message, room})
+        getUserId(username, userId => {
+            getRoomId(room, roomId => {
+                createMessage(message, userId, roomId)
+            })
+        })
         io.in(room).emit('new-message', message)
     })
 
@@ -29,9 +35,9 @@ module.exports.SocketManager = socket => {
 
     socket.on('set-socket-user', username => {
         socket.username = username
-        // getUserId(username, id => {
-        //     createRoom('community', id)
-        // })
+        getUserId(username, userId => {
+            updateRoom('community', userId)
+        })
     })
 
     socket.on('disconnect', reason => {

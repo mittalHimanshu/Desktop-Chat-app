@@ -1,13 +1,22 @@
 const User = require('./models/user')
 const Room = require('./models/room')
+const Message = require('./models/message')
 const mongoose = require('mongoose')
 
-// module.exports.createMessage = message => {
+module.exports.createMessage = (text, user, room) => {
+    const msg = new Message({text, room, user})
+    msg.save({text, room, user})
+        .then(msgObj => console.log(msgObj))
+}
 
-// }
+module.exports.getRoomId = (roomName, cb) => {
+    Room.findOne({roomName}).exec()
+        .then(room => {
+            return cb(room._id)
+        }).catch(err => err.message)
+}
 
 module.exports.createRoom = roomName => {
-
     Room.findOne({roomName}).exec()
         .then(room => {
             if(!room){
@@ -15,9 +24,17 @@ module.exports.createRoom = roomName => {
                     _id: mongoose.Types.ObjectId(),
                     roomName,
                 })
-                newRoom.save().then(room => console.log(room)).catch(err => console.log(err.message))
+                newRoom.save().then().catch(err => console.log(err.message))
             }
         }).catch(err => console.log(err.message))
+}
+
+module.exports.updateRoom = (roomName, payload) => {
+    Room.updateOne({roomName}, {
+        $push : {
+            users: payload
+        }
+    }).exec().then().catch(err => console.log(err))
 }
 
 module.exports.getUserId = (username, cb) => {
