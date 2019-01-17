@@ -1,4 +1,31 @@
 const User = require('./models/user')
+const Room = require('./models/room')
+const mongoose = require('mongoose')
+
+// module.exports.createMessage = message => {
+
+// }
+
+module.exports.createRoom = roomName => {
+
+    Room.findOne({roomName}).exec()
+        .then(room => {
+            if(!room){
+                const newRoom = new Room({
+                    _id: mongoose.Types.ObjectId(),
+                    roomName,
+                })
+                newRoom.save().then(room => console.log(room)).catch(err => console.log(err.message))
+            }
+        }).catch(err => console.log(err.message))
+}
+
+module.exports.getUserId = (username, cb) => {
+    User.findOne({username}).exec()
+        .then(user => {
+            return cb(user._id)
+        }).catch()
+}
 
 module.exports.getUsers = () => {
     User.find().exec().

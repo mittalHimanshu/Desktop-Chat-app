@@ -22,8 +22,8 @@ export class ChatService {
     this.socket.emit('handle-online-status', { username, status })
   }
 
-  public sendMessage = message => {
-    this.socket.emit('new-message', message)
+  public sendMessage = (message, room) => {
+    this.socket.emit('new-message', {message, room})
   }
 
   public getMessages = () => {

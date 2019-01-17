@@ -15,6 +15,7 @@ export class ChatsComponent implements OnInit {
   private username: string
   private sub: any
   private users: any
+  private room: string = 'community'
 
   constructor(
     private _auth: AuthService,
@@ -54,7 +55,7 @@ export class ChatsComponent implements OnInit {
 
   sendMessage = () => {
     this._chatService.handleTyping(this.username, false)
-    this._chatService.sendMessage(this.message)
+    this._chatService.sendMessage(this.message, this.room)
     this.message = ''
   }
 
