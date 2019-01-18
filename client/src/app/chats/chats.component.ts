@@ -56,11 +56,11 @@ export class ChatsComponent implements OnInit {
 
   sendMessage = () => {
     this._chatService.handleTyping(this.username, false)
-    if(this.room == 'community')
+    if (this.room == 'community')
       this._chatService.sendMessage(this.message, this.room)
-    else{
+    else {
       this._chatService.sendPrivateMessage(this.message, this.username, this.room, () => {
-        this._chatService.getChatRoomId({from: this.username, to: this.room}, roomId => {
+        this._chatService.getChatRoomId({ from: this.username, to: this.room }, roomId => {
           this._chatService.getPrivateMessages(roomId).subscribe(msgs => {
             this.messages = msgs
           })
@@ -71,8 +71,9 @@ export class ChatsComponent implements OnInit {
   }
 
   filterUsers = () => {
-    if(this.users)
+    if (this.users){
       return this.users.filter(user => user.username != this.username)
+    }
   }
 
   logoutUser = () => {
@@ -85,12 +86,17 @@ export class ChatsComponent implements OnInit {
 
   changeRoom = value => {
     this.room = value
-    this._chatService.setPrivateRoom({from: this.username, to: this.room})
-    this._chatService.getChatRoomId({from: this.username, to: this.room}, roomId => {
-      this._chatService.getPrivateMessages(roomId).subscribe(msgs => {
+    if (this.room != 'community') {
+      this._chatService.setPrivateRoom({ from: this.username, to: this.room })
+      this._chatService.getChatRoomId({ from: this.username, to: this.room }, roomId => {
+        this._chatService.getPrivateMessages(roomId).subscribe(msgs => {
+          this.messages = msgs
+        })
+      })
+    } else {
+      this._chatService.getPrivateMessages('community').subscribe(msgs => {
         this.messages = msgs
       })
-    })
+    }
   }
-
 }

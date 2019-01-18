@@ -9,7 +9,7 @@
 
 <br /><br />
 
-<div>community</div>
+<div (click) = "changeRoom('community')">community</div>
 <div *ngFor="let user of filterUsers()" 
     [style.background] = "user.is_active ? 'yellow' : ''" 
     [style.color]=" user.is_typing ? 'green' : ''"
