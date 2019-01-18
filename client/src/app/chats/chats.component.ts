@@ -16,6 +16,7 @@ export class ChatsComponent implements OnInit {
   private sub: any
   private users: any
   private room: string = 'community'
+  private chatRoomId: string
 
   constructor(
     private _auth: AuthService,
@@ -55,7 +56,17 @@ export class ChatsComponent implements OnInit {
 
   sendMessage = () => {
     this._chatService.handleTyping(this.username, false)
-    this._chatService.sendMessage(this.message, this.room)
+    if(this.room == 'community')
+      this._chatService.sendMessage(this.message, this.room)
+    else{
+      this._chatService.sendPrivateMessage(this.message, this.username, this.room, () => {
+        this._chatService.getChatRoomId({from: this.username, to: this.room}, roomId => {
+          this._chatService.getPrivateMessages(roomId).subscribe(msgs => {
+            this.messages = msgs
+          })
+        })
+      })
+    }
     this.message = ''
   }
 
@@ -70,6 +81,16 @@ export class ChatsComponent implements OnInit {
       .subscribe(
         res => this._router.navigate(['/login'])
       )
+  }
+
+  changeRoom = value => {
+    this.room = value
+    this._chatService.setPrivateRoom({from: this.username, to: this.room})
+    this._chatService.getChatRoomId({from: this.username, to: this.room}, roomId => {
+      this._chatService.getPrivateMessages(roomId).subscribe(msgs => {
+        this.messages = msgs
+      })
+    })
   }
 
 }

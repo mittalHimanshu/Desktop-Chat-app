@@ -22,8 +22,16 @@ export class ChatService {
     this.socket.emit('handle-online-status', { username, status })
   }
 
+  public setPrivateRoom = payload => {
+    this.socket.emit('set-private-room', payload)
+  }
+
   public sendMessage = (message, room) => {
     this.socket.emit('new-message', { message, room })
+  }
+
+  public sendPrivateMessage = (message, from, to, cb) => {
+    this.socket.emit('new-private-message', {message, from, to}, cb)
   }
 
   public getMessages = room => {
@@ -36,12 +44,28 @@ export class ChatService {
     })
   }
 
+  public getPrivateMessages = room => {
+    return Observable.create(observer => {
+      this._http.get(`/messages/${room}`).subscribe(
+        messages => {
+          observer.next(messages)
+        }
+      )
+    })
+  }
+
   public handleTyping = (username, status) => {
     this.socket.emit('handle-typing', { username, status })
   }
 
   public setSocketUser = username => {
     this.socket.emit('set-socket-user', username)
+  }
+
+  public getChatRoomId = (payload, cb) => {
+    this.socket.emit('get-chat-room-id', payload, chatRoomId => {
+      return cb(chatRoomId)
+    })
   }
 
   public getChangedUsers = () => {

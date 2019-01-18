@@ -5,6 +5,7 @@ const { updateTypingStatus,
     createRoom,
     updateRoom,
     getRoomId,
+    generateRoomId,
     createMessage,
     updateRoomById
 } = require('../factory')
@@ -28,6 +29,35 @@ module.exports.SocketManager = socket => {
         })
     })
 
+    socket.on('new-private-message', (payload, cb) => {
+        const { username } = socket
+        const { message, from, to } = payload
+        generateRoomId({from, to}, roomName => {
+            getUserId(username, userId => {
+                getRoomId(roomName, roomId => {
+                    createMessage(message, roomId, userId, msgId => {
+                        updateRoomById(roomId, msgId)
+                        cb()
+                    })
+                })
+            })
+        })
+    })
+
+    socket.on('set-private-room', payload => {
+        generateRoomId(payload, roomName => {
+            createRoom(roomName, roomName => {
+                if (!roomName) return
+                getUserId(payload.from, userId => {
+                    updateRoom(roomName, userId)
+                })
+                getUserId(payload.to, userId => {
+                    updateRoom(roomName, userId)
+                })
+            })
+        })
+    })
+
     socket.on('handle-typing', payload => {
         updateTypingStatus(payload)
     })
@@ -40,6 +70,12 @@ module.exports.SocketManager = socket => {
         socket.username = username
         getUserId(username, userId => {
             updateRoom('community', userId)
+        })
+    })
+
+    socket.on('get-chat-room-id', (payload, cb) => {
+        generateRoomId(payload, roomName => {
+            cb(roomName)
         })
     })
 

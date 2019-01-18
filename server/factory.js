@@ -4,14 +4,14 @@ const Message = require('./models/message')
 const mongoose = require('mongoose')
 const moment = require('moment')
 
-module.exports.createRoom = roomName => {
+module.exports.createRoom = (roomName, cb) => {
     Room.findOne({ roomName }).exec()
         .then(room => {
             if (!room) {
                 new Room({
                     _id: mongoose.Types.ObjectId(),
                     roomName
-                }).save()
+                }).save().then(room => cb(room.roomName))
             }
         })
 }
@@ -77,4 +77,12 @@ module.exports.updateOnlineStatus = payload => {
             is_active: status
         }
     }).exec().then(res => usersChanged()).catch(err => console.log(err.message))
+}
+
+module.exports.generateRoomId = (payload, cb) => {
+    const { from, to } = payload
+    var str = `${from}${to}`
+    var arr = str.split('')
+    var sorted = arr.sort()
+    return cb(sorted.join(''))
 }

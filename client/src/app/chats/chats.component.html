@@ -1,7 +1,7 @@
-{{username}}
+{{username}}                              {{room}} <br /><br />
 
 <input type="text" [(ngModel)]="message" (input)="handleTyping()"> <br /><br />
-<button (click)="sendMessage()">Send</button>
+<button (click)="sendMessage()">Send</button> <br /><br />
 
 <div *ngFor="let message of messages">
   {{message.text}}    {{message.created_at}}   {{message.user.username}}
@@ -9,9 +9,12 @@
 
 <br /><br />
 
+<div>community</div>
 <div *ngFor="let user of filterUsers()" 
     [style.background] = "user.is_active ? 'yellow' : ''" 
-    [style.color]=" user.is_typing ? 'green' : ''">
+    [style.color]=" user.is_typing ? 'green' : ''"
+    (click) = "changeRoom(user.username)"
+    >
   {{user.username}}
 </div>
 
