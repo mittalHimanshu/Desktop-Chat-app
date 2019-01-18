@@ -4,7 +4,7 @@
 <button (click)="sendMessage()">Send</button>
 
 <div *ngFor="let message of messages">
-  {{message}}
+  {{message.text}}    {{message.created_at}}   {{message.user.username}}
 </div>
 
 <br /><br />

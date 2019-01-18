@@ -6,12 +6,12 @@ const RoomSchema = new mongoose.Schema({
         type: String,
         default: 'community'
     },
-    users: {
-        type: [mongoose.Schema.Types.ObjectId], ref: 'User', unique: true
-    },
-    messages: {
-        type: [mongoose.Schema.Types.ObjectId], ref: 'Message'
-    }
+    users: [
+       {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+    ],
+    messages: [
+        {type: mongoose.Schema.Types.ObjectId, ref: 'Message'}
+    ]
 })
 
-module.exports = mongoose.model('Room', RoomSchema)
+module.exports = mongoose.model('Room', RoomSchema, 'Room')

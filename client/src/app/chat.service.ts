@@ -23,13 +23,15 @@ export class ChatService {
   }
 
   public sendMessage = (message, room) => {
-    this.socket.emit('new-message', {message, room})
+    this.socket.emit('new-message', { message, room })
   }
 
-  public getMessages = () => {
+  public getMessages = room => {
     return Observable.create(observer => {
-      this.socket.on('new-message', message => {
-        observer.next(message)
+      this.socket.on('new-message', () => {
+        this._http.get(`/messages/${room}`).subscribe(
+          messages => observer.next(messages)
+        )
       })
     })
   }

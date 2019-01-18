@@ -9,7 +9,7 @@ export class AuthService {
   constructor(private _http: HttpClient) { }
 
   public registerUser = userData => 
-    this._http.post('/api/register', userData)  
+    this._http.post('/api/register', userData)
 
   public loginUser = userData =>
     this._http.post('/api/login', userData)
@@ -20,7 +20,7 @@ export class AuthService {
   public logoutUser = () =>
     this._http.get('/api/logout')
 
-  public getInitialUsers = () =>
-    this._http.get('/user')
+  public getInitialChats = room => 
+    this._http.get(`/messages/${room}`)
     
 }

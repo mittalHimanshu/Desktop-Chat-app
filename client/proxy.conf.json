@@ -18,5 +18,15 @@
         "secure": false,
         "changeOrigin": true,
         "logLevel": "info"
+    },
+    "/messages": {
+        "target": {
+            "host": "localhost",
+            "protocol": "http:",
+            "port": 5000
+        },
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "info"
     }
 }

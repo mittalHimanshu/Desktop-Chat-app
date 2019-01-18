@@ -2,27 +2,30 @@ const io = require('../server')
 const { updateTypingStatus,
     updateOnlineStatus,
     getUserId,
-    createMessage,
     createRoom,
     updateRoom,
-    getRoomId
+    getRoomId,
+    createMessage,
+    updateRoomById
 } = require('../factory')
 
 module.exports.SocketManager = socket => {
 
-    createRoom('community')
-
     socket.join('community')
+
+    createRoom('community')
 
     socket.on('new-message', payload => {
         const { username } = socket
         const { message, room } = payload
         getUserId(username, userId => {
             getRoomId(room, roomId => {
-                createMessage(message, userId, roomId)
+                createMessage(message, roomId, userId, msgId => {
+                    updateRoomById(roomId, msgId)
+                    io.in(room).emit('new-message')
+                })
             })
         })
-        io.in(room).emit('new-message', message)
     })
 
     socket.on('handle-typing', payload => {

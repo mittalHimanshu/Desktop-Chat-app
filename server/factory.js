@@ -2,43 +2,51 @@ const User = require('./models/user')
 const Room = require('./models/room')
 const Message = require('./models/message')
 const mongoose = require('mongoose')
-
-module.exports.createMessage = (text, user, room) => {
-    const msg = new Message({text, room, user})
-    msg.save({text, room, user})
-        .then(msgObj => console.log(msgObj))
-}
-
-module.exports.getRoomId = (roomName, cb) => {
-    Room.findOne({roomName}).exec()
-        .then(room => {
-            return cb(room._id)
-        }).catch(err => err.message)
-}
+const moment = require('moment')
 
 module.exports.createRoom = roomName => {
-    Room.findOne({roomName}).exec()
+    Room.findOne({ roomName }).exec()
         .then(room => {
-            if(!room){
-                const newRoom = new Room({
+            if (!room) {
+                new Room({
                     _id: mongoose.Types.ObjectId(),
-                    roomName,
-                })
-                newRoom.save().then().catch(err => console.log(err.message))
+                    roomName
+                }).save()
             }
-        }).catch(err => console.log(err.message))
+        })
 }
 
+module.exports.createMessage = (text, room, user, cb) => {
+    const created_at = moment().format('MMMM Do YYYY, h:mm:ss A')
+    new Message({ text, room, user, created_at }).save().then(msg => {
+        cb(msg._id)
+    })
+}
+
+module.exports.updateRoomById = (_id, msgId) => {
+    Room.findByIdAndUpdate({ _id }, {
+        $push: { messages: msgId }
+    }).exec().then().catch(err => console.log(err.message))
+}
+
+
 module.exports.updateRoom = (roomName, payload) => {
-    Room.updateOne({roomName}, {
-        $push : {
+    Room.updateOne({ roomName }, {
+        $addToSet: {
             users: payload
         }
     }).exec().then().catch(err => console.log(err))
 }
 
+module.exports.getRoomId = (roomName, cb) => {
+    Room.findOne({ roomName }).exec()
+        .then(room => {
+            return cb(room._id)
+        }).catch(err => err.message)
+}
+
 module.exports.getUserId = (username, cb) => {
-    User.findOne({username}).exec()
+    User.findOne({ username }).exec()
         .then(user => {
             return cb(user._id)
         }).catch()
@@ -52,7 +60,7 @@ module.exports.getUsers = () => {
 }
 
 module.exports.updateTypingStatus = payload => {
-    const {usersChanged} = require('./SocketManager')
+    const { usersChanged } = require('./SocketManager')
     const { username, status } = payload
     User.updateOne({ username }, {
         $set: {
@@ -62,7 +70,7 @@ module.exports.updateTypingStatus = payload => {
 }
 
 module.exports.updateOnlineStatus = payload => {
-    const {usersChanged} = require('./SocketManager')
+    const { usersChanged } = require('./SocketManager')
     const { username, status } = payload
     User.updateOne({ username }, {
         $set: {

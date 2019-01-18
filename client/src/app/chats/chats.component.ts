@@ -11,7 +11,7 @@ import { Component, OnInit } from '@angular/core';
 export class ChatsComponent implements OnInit {
 
   private message: string = ''
-  private messages: string[] = []
+  private messages: any
   private username: string
   private sub: any
   private users: any
@@ -31,12 +31,12 @@ export class ChatsComponent implements OnInit {
       this._chatService.setSocketUser(this.username)
     })
 
-    this._auth.getInitialUsers().subscribe(initialUsers => {
-      this.users = initialUsers
+    this._auth.getInitialChats(this.room).subscribe(initialChats => {
+      this.messages = initialChats
     })
 
-    this._chatService.getMessages().subscribe(message => {
-      this.messages.push(message)
+    this._chatService.getMessages(this.room).subscribe(msgs => {
+      this.messages = msgs
     })
 
     this._chatService.getChangedUsers().subscribe(changedUsers => {

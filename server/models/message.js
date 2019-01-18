@@ -6,11 +6,9 @@ const MessageSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, ref: 'Room'
     },
     user: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'User', unique: true
+        type: mongoose.Schema.Types.ObjectId, ref: 'User'
     },
-    created_at: {
-        type: Date, default: Date.now
-    }
+    created_at: String
 })
 
-module.exports = mongoose.model('Message', MessageSchema)
+module.exports = mongoose.model('Message', MessageSchema, 'Message')
