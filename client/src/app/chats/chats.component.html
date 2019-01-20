@@ -1,6 +1,6 @@
 {{username}}                              {{room}} <br /><br />
 
-<input type="text" [(ngModel)]="message" (input)="handleTyping()"> <br /><br />
+<input type="text" [(ngModel)]="message" (input)="handleTyping()" (blur)="onBlurMethod()"> <br /><br />
 <button (click)="sendMessage()">Send</button> <br /><br />
 
 <div *ngFor="let message of messages">

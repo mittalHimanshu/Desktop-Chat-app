@@ -15,14 +15,25 @@ module.exports.removeSocket = username => {
     delete userSockets[`${username}`]
 }
 
-module.exports.createRoom = (roomName) => {
+module.exports.generateRoomId = (payload, cb) => {
+    const { from, to } = payload
+    if (to == 'community') return cb('community')
+    var str = `${from}${to}`
+    var arr = str.split('')
+    var sorted = arr.sort()
+    return cb(sorted.join(''))
+}
+
+module.exports.createRoom = (roomName, cb) => {
     Room.findOne({ roomName }).exec()
         .then(room => {
             if (!room) {
                 new Room({
                     _id: mongoose.Types.ObjectId(),
                     roomName
-                }).save()
+                }).save().then(
+                    room => cb(room.roomName)
+                )
             }
         })
 }
@@ -90,12 +101,4 @@ module.exports.updateTypingStatus = payload => {
             is_typing: status
         }
     }).exec().then(res => usersChanged()).catch(err => console.log(err.message))
-}
-
-module.exports.generateRoomId = (payload, cb) => {
-    const { from, to } = payload
-    var str = `${from}${to}`
-    var arr = str.split('')
-    var sorted = arr.sort()
-    return cb(sorted.join(''))
 }

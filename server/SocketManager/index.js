@@ -18,6 +18,13 @@ module.exports.SocketManager = socket => {
 
     createRoom('community')
 
+    socket.on('disconnect', reason => {
+        const { username } = socket
+        removeSocket(username)
+        updateOnlineStatus({ username, status: false })
+        updateTypingStatus({ username, status: false })
+    })
+
     socket.on('set-socket-user', payload => {
         const { username } = payload
         setSocket(socket, username)
@@ -34,19 +41,35 @@ module.exports.SocketManager = socket => {
         updateTypingStatus(payload)
     })
 
-    // ----------------------------------------------
-    socket.on('new-message', payload => {
-        const { username } = socket
-        const { message, room } = payload
-        getUserId(username, userId => {
-            getRoomId(room, roomId => {
-                createMessage(message, roomId, userId, msgId => {
-                    updateRoomById(roomId, msgId)
-                    io.in(room).emit('new-message')
+    socket.on('set-private-room', payload => {
+        generateRoomId(payload, roomName => {
+            createRoom(roomName, roomName => {
+                if (!roomName) return
+                getUserId(payload.from, userId => {
+                    updateRoomUserId(roomName, userId)
+                })
+                getUserId(payload.to, userId => {
+                    updateRoomUserId(roomName, userId)
                 })
             })
         })
     })
+
+    socket.on('new-message', payload => {
+        const { username, room, message } = payload
+        generateRoomId({ from: username, to: room }, roomName => {
+            io.in(roomName).emit('new-message', message)
+            getUserId(username, userId => {
+                getRoomId(roomName, roomId => {
+                    createMessage(message, roomId, userId, msgId => {
+                        updateRoomById(roomId, msgId)
+                    })
+                })
+            })
+        })
+    })
+
+    // ----------------------------------------------
 
     socket.on('new-private-message', (payload, cb) => {
         const { username } = socket
@@ -63,31 +86,10 @@ module.exports.SocketManager = socket => {
         })
     })
 
-    socket.on('set-private-room', payload => {
-        generateRoomId(payload, roomName => {
-            createRoom(roomName, roomName => {
-                if (!roomName) return
-                getUserId(payload.from, userId => {
-                    updateRoom(roomName, userId)
-                })
-                getUserId(payload.to, userId => {
-                    updateRoom(roomName, userId)
-                })
-            })
-        })
-    })
-
     socket.on('get-chat-room-id', (payload, cb) => {
         generateRoomId(payload, roomName => {
             cb(roomName)
         })
-    })
-
-    socket.on('disconnect', reason => {
-        const { username } = socket
-        removeSocket(username)
-        updateOnlineStatus({ username, status: false })
-        updateTypingStatus({ username, status: false })
     })
 
 }

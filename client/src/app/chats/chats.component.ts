@@ -37,30 +37,27 @@ export class ChatsComponent implements OnInit {
       this.users = changedUsers.users
     })
 
-    this._chatService.getInitialChats(this.room).subscribe(initialChats => {
+    this._chatService.getInitialChats(this.room, this.username).subscribe(initialChats => {
       this.messages = initialChats
     })
 
-    // this._chatService.getMessages(this.room).subscribe(msgs => {
-    //   this.messages = msgs
-    // })
+    this._chatService.getMessage().subscribe(message => {
+      this.messages.push(message)
+    })
 
   }
 
   changeRoom = value => {
     this.room = value
-    if (this.room != 'community') {
-      this._chatService.setPrivateRoom({ from: this.username, to: this.room })
-      this._chatService.getChatRoomId({ from: this.username, to: this.room }, roomId => {
-        this._chatService.getPrivateMessages(roomId).subscribe(msgs => {
-          this.messages = msgs
-        })
-      })
-    } else {
-      this._chatService.getPrivateMessages('community').subscribe(msgs => {
-        this.messages = msgs
+    if(this.room != 'community'){
+      this._chatService.setPrivateRoom({
+        from: this.username,
+        to: this.room
       })
     }
+    this._chatService.getInitialChats(this.room, this.username).subscribe(initalChats => {
+      this.messages = initalChats
+    })
   }
 
   handleTyping = () => {
@@ -70,24 +67,17 @@ export class ChatsComponent implements OnInit {
       this._chatService.handleTyping(this.username, false)
   }
 
-  sendMessage = () => {
+  onBlurMethod = () => {
     this._chatService.handleTyping(this.username, false)
-    if (this.room == 'community')
-      this._chatService.sendMessage(this.message, this.room)
-    else {
-      this._chatService.sendPrivateMessage(this.message, this.username, this.room, () => {
-        this._chatService.getChatRoomId({ from: this.username, to: this.room }, roomId => {
-          this._chatService.getPrivateMessages(roomId).subscribe(msgs => {
-            this.messages = msgs
-          })
-        })
-      })
-    }
+  }
+
+  sendMessage = () => {
+    this._chatService.sendMessage(this.username, this.room, this.message)
     this.message = ''
   }
 
   filterUsers = () => {
-    if (this.users){
+    if (this.users) {
       return this.users.filter(user => user.username != this.username)
     }
   }
