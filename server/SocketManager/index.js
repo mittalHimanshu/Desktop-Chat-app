@@ -9,7 +9,9 @@ const { updateTypingStatus,
     createMessage,
     updateRoomById,
     setSocket,
-    removeSocket
+    removeSocket,
+    findAndJoinRoom,
+    generateTempMessage
 } = require('../factory')
 
 module.exports.SocketManager = socket => {
@@ -43,6 +45,8 @@ module.exports.SocketManager = socket => {
 
     socket.on('set-private-room', payload => {
         generateRoomId(payload, roomName => {
+            socket.join(roomName)
+            findAndJoinRoom(payload.to, roomName)
             createRoom(roomName, roomName => {
                 if (!roomName) return
                 getUserId(payload.from, userId => {
@@ -57,38 +61,20 @@ module.exports.SocketManager = socket => {
 
     socket.on('new-message', payload => {
         const { username, room, message } = payload
+
         generateRoomId({ from: username, to: room }, roomName => {
-            io.in(roomName).emit('new-message', message)
+
+            generateTempMessage({username, text: message, room}, msg => {
+                io.in(roomName).emit('new-message', msg)
+            })
+
             getUserId(username, userId => {
                 getRoomId(roomName, roomId => {
-                    createMessage(message, roomId, userId, msgId => {
-                        updateRoomById(roomId, msgId)
+                    createMessage(message, roomId, userId, msg => {
+                        updateRoomById(roomId, msg._id)
                     })
                 })
             })
-        })
-    })
-
-    // ----------------------------------------------
-
-    socket.on('new-private-message', (payload, cb) => {
-        const { username } = socket
-        const { message, from, to } = payload
-        generateRoomId({ from, to }, roomName => {
-            getUserId(username, userId => {
-                getRoomId(roomName, roomId => {
-                    createMessage(message, roomId, userId, msgId => {
-                        updateRoomById(roomId, msgId)
-                        cb()
-                    })
-                })
-            })
-        })
-    })
-
-    socket.on('get-chat-room-id', (payload, cb) => {
-        generateRoomId(payload, roomName => {
-            cb(roomName)
         })
     })
 

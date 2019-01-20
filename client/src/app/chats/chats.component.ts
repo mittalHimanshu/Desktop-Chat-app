@@ -15,7 +15,6 @@ export class ChatsComponent implements OnInit {
   private username: string
   private users: any
   private room: string = 'community'
-  private chatRoomId: string
 
   constructor(
     private _auth: AuthService,
@@ -37,26 +36,28 @@ export class ChatsComponent implements OnInit {
       this.users = changedUsers.users
     })
 
-    this._chatService.getInitialChats(this.room, this.username).subscribe(initialChats => {
-      this.messages = initialChats
+    this._chatService.getInitialChats(this.room, this.username).subscribe((initialChats: any) => {
+      this.messages = initialChats.messages
     })
 
     this._chatService.getMessage().subscribe(message => {
-      this.messages.push(message)
+      if ((message.room == 'community' && this.room == 'community')
+        || (message.room == this.username && message.user.username == this.room)
+        || message.room == this.room) this.messages.push(message)
     })
 
   }
 
   changeRoom = value => {
     this.room = value
-    if(this.room != 'community'){
+    if (this.room != 'community') {
       this._chatService.setPrivateRoom({
         from: this.username,
         to: this.room
       })
     }
-    this._chatService.getInitialChats(this.room, this.username).subscribe(initalChats => {
-      this.messages = initalChats
+    this._chatService.getInitialChats(this.room, this.username).subscribe((initialChats: any) => {
+      this.messages = initialChats.messages
     })
   }
 

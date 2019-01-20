@@ -1,6 +1,11 @@
-<p>register</p>
-
-<input type="text" name="username" [(ngModel)]="registerData.username" />
-<input type="text" name="password" [(ngModel)]="registerData.password" />
-<button (click)="registerUser()">Submit</button> <br />
-<button (click)="navigateToLogin()">Login</button>
+<div class="text-center">
+    <form class="form-signin">
+        <h1 class="h3 mb-3 font-weight-normal">Register</h1>
+        <input style="width: 300px;" type="text" [(ngModel)]="registerData.username" name="username" class="form-control" placeholder="Username"
+            required autofocus>
+        <input type="password" [(ngModel)]="registerData.password" name="password" class="form-control" placeholder="Password"
+            required style="margin-top: 10px;">
+        <button class="btn btn-lg btn-primary btn-block" type="submit" (click)="registerUser()">Sign in</button>
+        <div class="mt-5 mb-3 text-muted" (click)="navigateToLogin()">Already Registred ? Login Here</div>
+    </form>
+</div>

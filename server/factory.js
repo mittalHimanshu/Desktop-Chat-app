@@ -6,6 +6,12 @@ const moment = require('moment')
 
 let userSockets = {}
 
+module.exports.generateTempMessage = (payload, cb) => {
+    const {username, text, room} = payload
+    const created_at = moment().format('MMMM Do YYYY, h:mm:ss A')
+    return cb({text, "user":{"username": username}, created_at, room})
+}
+
 module.exports.setSocket = (socket, username) => {
     socket.username = username
     userSockets[`${username}`] = socket
@@ -13,6 +19,11 @@ module.exports.setSocket = (socket, username) => {
 
 module.exports.removeSocket = username => {
     delete userSockets[`${username}`]
+}
+
+module.exports.findAndJoinRoom = (username, roomName) => {
+    const userSocket = userSockets[`${username}`]
+    if(userSocket) userSocket.join(roomName)
 }
 
 module.exports.generateRoomId = (payload, cb) => {
@@ -37,7 +48,6 @@ module.exports.createRoom = (roomName, cb) => {
             }
         })
 }
-
 
 module.exports.updateRoomUserId = (roomName, userId) => {
     Room.updateOne({ roomName }, {
@@ -64,12 +74,10 @@ module.exports.updateOnlineStatus = payload => {
     }).exec().then(user => usersChanged()).catch(err => console.log(err.message))
 }
 
-// --------------------------------------------------------
-
 module.exports.createMessage = (text, room, user, cb) => {
     const created_at = moment().format('MMMM Do YYYY, h:mm:ss A')
     new Message({ text, room, user, created_at }).save().then(msg => {
-        cb(msg._id)
+        cb(msg)
     })
 }
 
@@ -84,13 +92,6 @@ module.exports.getRoomId = (roomName, cb) => {
         .then(room => {
             return cb(room._id)
         }).catch(err => err.message)
-}
-
-module.exports.getUsers = () => {
-    User.find().exec().
-        then(users => {
-            return users
-        }).catch()
 }
 
 module.exports.updateTypingStatus = payload => {

@@ -59,26 +59,4 @@ export class ChatService {
     })
   }
 
-  // ----------------------------------------
-
-  // public sendPrivateMessage = (message, from, to, cb) => {
-  //   this.socket.emit('new-private-message', { message, from, to }, cb)
-  // }
-
-  // public getPrivateMessages = room => {
-  //   return Observable.create(observer => {
-  //     this._http.get(`/messages/${room}`).subscribe(
-  //       messages => {
-  //         observer.next(messages)
-  //       }
-  //     )
-  //   })
-  // }
-
-  // public getChatRoomId = (payload, cb) => {
-  //   this.socket.emit('get-chat-room-id', payload, chatRoomId => {
-  //     return cb(chatRoomId)
-  //   })
-  // }
-
 }

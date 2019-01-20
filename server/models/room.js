@@ -11,7 +11,10 @@ const RoomSchema = new mongoose.Schema({
     ],
     messages: [
         {type: mongoose.Schema.Types.ObjectId, ref: 'Message'}
-    ]
+    ],
+    unreadCount: {
+        type: Number, default: 0
+    }
 })
 
 module.exports = mongoose.model('Room', RoomSchema, 'Room')

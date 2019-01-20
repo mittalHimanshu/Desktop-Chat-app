@@ -8,7 +8,7 @@ const MessageSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
     },
-    created_at: String
+    created_at: String,
 })
 
 module.exports = mongoose.model('Message', MessageSchema, 'Message')
