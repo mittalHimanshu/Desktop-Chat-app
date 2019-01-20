@@ -9,13 +9,16 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  private loginData = {username: '', password: ''}
+  private loginData = { username: '', password: '' }
 
   constructor(private _auth: AuthService, private _router: Router) { }
 
   ngOnInit() {
     this._auth.isLoggedIn().subscribe(
-      username => this._router.navigate(['/chats'], { queryParams: {username}}),
+      (payload: { "username": '' }) => {
+        const { username } = payload
+        return this._router.navigate(['/chats'], { queryParams: { username } })
+      },
       err => console.log(err)
     )
   }
@@ -23,7 +26,10 @@ export class LoginComponent implements OnInit {
   loginUser = () => {
     this._auth.loginUser(this.loginData)
       .subscribe(
-        username => this._router.navigate(['/chats'], { queryParams: {username}}),
+        (payload: { "username": '' }) => {
+          const { username } = payload
+          return this._router.navigate(['/chats'], { queryParams: { username } })
+        },
         err => console.log(err)
       )
   }

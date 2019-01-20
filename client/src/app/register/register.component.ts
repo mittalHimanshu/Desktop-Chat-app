@@ -19,7 +19,10 @@ export class RegisterComponent implements OnInit {
   registerUser = () => {
     this._auth.registerUser(this.registerData)
       .subscribe(
-        username => this._router.navigate(['/chats'], { queryParams: {username} }),
+        (payload: { "username": '' }) => {
+          const { username } = payload
+          return this._router.navigate(['/chats'], { queryParams: { username } })
+        },
         err => console.log(err.message)
       )
   }

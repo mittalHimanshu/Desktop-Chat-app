@@ -15,8 +15,8 @@ router.get('/:roomName', (req, res, next) => {
         })
         .exec()
         .then(room => {
-            res.status(200).json(room.messages)
-        }).catch(err => console.log(err))
+            return res.status(200).json({ "messages": room.messages })
+        }).catch(err => res.status(500).json({ "error": err.message }))
 })
 
 module.exports = router

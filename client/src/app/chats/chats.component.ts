@@ -13,7 +13,6 @@ export class ChatsComponent implements OnInit {
   private message: string = ''
   private messages: any
   private username: string
-  private sub: any
   private users: any
   private room: string = 'community'
   private chatRoomId: string
@@ -27,24 +26,41 @@ export class ChatsComponent implements OnInit {
 
   ngOnInit() {
 
-    this.sub = this.route.queryParams.subscribe(queryParams => {
+    this.route.queryParams.subscribe(queryParams => {
       this.username = queryParams['username']
       this._chatService.setSocketUser(this.username)
     })
 
-    this._auth.getInitialChats(this.room).subscribe(initialChats => {
+    this._chatService.setOnlineStatus(this.username, true)
+
+    this._chatService.getChangedUsers().subscribe(changedUsers => {
+      this.users = changedUsers.users
+    })
+
+    this._chatService.getInitialChats(this.room).subscribe(initialChats => {
       this.messages = initialChats
     })
 
-    this._chatService.getMessages(this.room).subscribe(msgs => {
-      this.messages = msgs
-    })
+    // this._chatService.getMessages(this.room).subscribe(msgs => {
+    //   this.messages = msgs
+    // })
 
-    this._chatService.getChangedUsers().subscribe(changedUsers => {
-      this.users = changedUsers
-    })
+  }
 
-    this._chatService.setOnlineStatus(this.username, true)
+  changeRoom = value => {
+    this.room = value
+    if (this.room != 'community') {
+      this._chatService.setPrivateRoom({ from: this.username, to: this.room })
+      this._chatService.getChatRoomId({ from: this.username, to: this.room }, roomId => {
+        this._chatService.getPrivateMessages(roomId).subscribe(msgs => {
+          this.messages = msgs
+        })
+      })
+    } else {
+      this._chatService.getPrivateMessages('community').subscribe(msgs => {
+        this.messages = msgs
+      })
+    }
   }
 
   handleTyping = () => {
@@ -84,19 +100,4 @@ export class ChatsComponent implements OnInit {
       )
   }
 
-  changeRoom = value => {
-    this.room = value
-    if (this.room != 'community') {
-      this._chatService.setPrivateRoom({ from: this.username, to: this.room })
-      this._chatService.getChatRoomId({ from: this.username, to: this.room }, roomId => {
-        this._chatService.getPrivateMessages(roomId).subscribe(msgs => {
-          this.messages = msgs
-        })
-      })
-    } else {
-      this._chatService.getPrivateMessages('community').subscribe(msgs => {
-        this.messages = msgs
-      })
-    }
-  }
 }

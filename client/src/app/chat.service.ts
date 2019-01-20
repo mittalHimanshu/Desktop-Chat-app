@@ -17,10 +17,27 @@ export class ChatService {
       console.log(this.socket.id)
     })
   }
+  
+  public setSocketUser = username => {
+    this.socket.emit('set-socket-user', { username })
+  }
+
+  public getChangedUsers = () => {
+    return Observable.create(observer => {
+      this.socket.on('users-changed', () => {
+        this._http.get('/auth/users').subscribe(
+          users => observer.next(users)
+        )
+      })
+    })
+  }
 
   public setOnlineStatus = (username, status) => {
     this.socket.emit('handle-online-status', { username, status })
   }
+  
+  public getInitialChats = room => 
+    this._http.get(`/messages/${room}`)
 
   public setPrivateRoom = payload => {
     this.socket.emit('set-private-room', payload)
@@ -31,7 +48,7 @@ export class ChatService {
   }
 
   public sendPrivateMessage = (message, from, to, cb) => {
-    this.socket.emit('new-private-message', {message, from, to}, cb)
+    this.socket.emit('new-private-message', { message, from, to }, cb)
   }
 
   public getMessages = room => {
@@ -58,23 +75,10 @@ export class ChatService {
     this.socket.emit('handle-typing', { username, status })
   }
 
-  public setSocketUser = username => {
-    this.socket.emit('set-socket-user', username)
-  }
 
   public getChatRoomId = (payload, cb) => {
     this.socket.emit('get-chat-room-id', payload, chatRoomId => {
       return cb(chatRoomId)
-    })
-  }
-
-  public getChangedUsers = () => {
-    return Observable.create(observer => {
-      this.socket.on('users-changed', () => {
-        this._http.get('/user').subscribe(
-          users => observer.next(users)
-        )
-      })
     })
   }
 

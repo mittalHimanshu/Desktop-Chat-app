@@ -1,15 +1,5 @@
 {
-    "/api": {
-        "target": {
-            "host": "localhost",
-            "protocol": "http:",
-            "port": 5000
-        },
-        "secure": false,
-        "changeOrigin": true,
-        "logLevel": "info"
-    },
-    "/user": {
+    "/auth": {
         "target": {
             "host": "localhost",
             "protocol": "http:",

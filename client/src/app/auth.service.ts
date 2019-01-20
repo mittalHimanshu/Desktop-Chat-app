@@ -9,18 +9,15 @@ export class AuthService {
   constructor(private _http: HttpClient) { }
 
   public registerUser = userData => 
-    this._http.post('/api/register', userData)
+    this._http.post('/auth/register', userData)
 
   public loginUser = userData =>
-    this._http.post('/api/login', userData)
+    this._http.post('/auth/login', userData)
 
   public isLoggedIn = () => 
-    this._http.get('/api/isLoggedIn')
+    this._http.get('/auth/isLoggedIn')
 
   public logoutUser = () =>
-    this._http.get('/api/logout')
-
-  public getInitialChats = room => 
-    this._http.get(`/messages/${room}`)
+    this._http.get('/auth/logout')
     
 }

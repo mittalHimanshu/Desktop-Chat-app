@@ -1,8 +1,8 @@
 module.exports.ensureAuthenticated = (req, res) => {
-    if(req.isAuthenticated()){
-        return res.json(req.user.username)
+    if (req.isAuthenticated()) {
+        return res.status(200).json({ "username": req.user.username })
     }
-    else{
-        return res.status(401).send(new Error('Not Logged In'))
+    else {
+        return res.status(401).json({ "message": "Not Logged In" })
     }
 }

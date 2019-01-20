@@ -3,11 +3,13 @@ const { updateTypingStatus,
     updateOnlineStatus,
     getUserId,
     createRoom,
-    updateRoom,
+    updateRoomUserId,
     getRoomId,
     generateRoomId,
     createMessage,
-    updateRoomById
+    updateRoomById,
+    setSocket,
+    removeSocket
 } = require('../factory')
 
 module.exports.SocketManager = socket => {
@@ -16,6 +18,23 @@ module.exports.SocketManager = socket => {
 
     createRoom('community')
 
+    socket.on('set-socket-user', payload => {
+        const { username } = payload
+        setSocket(socket, username)
+        getUserId(username, userId => {
+            updateRoomUserId('community', userId)
+        })
+    })
+
+    socket.on('handle-online-status', payload => {
+        updateOnlineStatus(payload)
+    })
+
+    socket.on('handle-typing', payload => {
+        updateTypingStatus(payload)
+    })
+
+    // ----------------------------------------------
     socket.on('new-message', payload => {
         const { username } = socket
         const { message, room } = payload
@@ -32,7 +51,7 @@ module.exports.SocketManager = socket => {
     socket.on('new-private-message', (payload, cb) => {
         const { username } = socket
         const { message, from, to } = payload
-        generateRoomId({from, to}, roomName => {
+        generateRoomId({ from, to }, roomName => {
             getUserId(username, userId => {
                 getRoomId(roomName, roomId => {
                     createMessage(message, roomId, userId, msgId => {
@@ -58,21 +77,6 @@ module.exports.SocketManager = socket => {
         })
     })
 
-    socket.on('handle-typing', payload => {
-        updateTypingStatus(payload)
-    })
-
-    socket.on('handle-online-status', payload => {
-        updateOnlineStatus(payload)
-    })
-
-    socket.on('set-socket-user', username => {
-        socket.username = username
-        getUserId(username, userId => {
-            updateRoom('community', userId)
-        })
-    })
-
     socket.on('get-chat-room-id', (payload, cb) => {
         generateRoomId(payload, roomName => {
             cb(roomName)
@@ -81,6 +85,7 @@ module.exports.SocketManager = socket => {
 
     socket.on('disconnect', reason => {
         const { username } = socket
+        removeSocket(username)
         updateOnlineStatus({ username, status: false })
         updateTypingStatus({ username, status: false })
     })
