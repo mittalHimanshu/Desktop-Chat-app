@@ -1,7 +1,7 @@
 import { ChatService } from './../chat.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from './../auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-chats',
@@ -15,6 +15,7 @@ export class ChatsComponent implements OnInit {
   private username: string
   private users: any
   private room: string = 'community'
+  private isLoading: boolean
 
   constructor(
     private _auth: AuthService,
@@ -24,6 +25,8 @@ export class ChatsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    this.isLoading = true
 
     this.route.queryParams.subscribe(queryParams => {
       this.username = queryParams['username']
@@ -37,6 +40,7 @@ export class ChatsComponent implements OnInit {
     })
 
     this._chatService.getInitialChats(this.room, this.username).subscribe((initialChats: any) => {
+      this.isLoading = false
       this.messages = initialChats.messages
     })
 
@@ -50,6 +54,7 @@ export class ChatsComponent implements OnInit {
 
   changeRoom = value => {
     this.room = value
+    this.isLoading = true
     if (this.room != 'community') {
       this._chatService.setPrivateRoom({
         from: this.username,
@@ -57,6 +62,7 @@ export class ChatsComponent implements OnInit {
       })
     }
     this._chatService.getInitialChats(this.room, this.username).subscribe((initialChats: any) => {
+      this.isLoading = false
       this.messages = initialChats.messages
     })
   }
@@ -73,6 +79,7 @@ export class ChatsComponent implements OnInit {
   }
 
   sendMessage = () => {
+    this._chatService.handleTyping(this.username, false)
     this._chatService.sendMessage(this.username, this.room, this.message)
     this.message = ''
   }

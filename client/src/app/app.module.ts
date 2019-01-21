@@ -10,6 +10,7 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { ChatsComponent } from './chats/chats.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
