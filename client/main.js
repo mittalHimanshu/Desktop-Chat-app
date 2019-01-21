@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 const isDev = require('electron-is-dev')
 let mainWindow
 
@@ -6,6 +6,7 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1000,
         height: 600,
+        frame: false
     })
 
     mainWindow.loadURL(
@@ -18,6 +19,14 @@ function createWindow() {
         mainWindow = null
     })
 }
+
+ipcMain.on('close-window', event => {
+    mainWindow.close()
+})
+
+ipcMain.on('minimize-window', event => {
+    mainWindow.minimize()
+})
 
 app.on('ready', createWindow)
 

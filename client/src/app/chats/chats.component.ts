@@ -1,7 +1,8 @@
 import { ChatService } from './../chat.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from './../auth.service';
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ElectronService } from 'ngx-electron';
 
 @Component({
   selector: 'app-chats',
@@ -16,12 +17,14 @@ export class ChatsComponent implements OnInit {
   private users: any
   private room: string = 'community'
   private isLoading: boolean
+  private totalOnline: number = 0
 
   constructor(
     private _auth: AuthService,
     private _router: Router,
     private _chatService: ChatService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _electron: ElectronService
   ) { }
 
   ngOnInit() {
@@ -52,7 +55,16 @@ export class ChatsComponent implements OnInit {
 
   }
 
+  close = () => {
+    this._electron.ipcRenderer.send('close-window')
+  }
+
+  minimize = () => {
+    this._electron.ipcRenderer.send('minimize-window')
+  }
+
   changeRoom = value => {
+    if (value == this.room) return
     this.room = value
     this.isLoading = true
     if (this.room != 'community') {
@@ -85,7 +97,11 @@ export class ChatsComponent implements OnInit {
   }
 
   filterUsers = () => {
+    this.totalOnline = 0
     if (this.users) {
+      this.users.forEach(user => {
+        if (user.is_active) this.totalOnline += 1
+      });
       return this.users.filter(user => user.username != this.username)
     }
   }

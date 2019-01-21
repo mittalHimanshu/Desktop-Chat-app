@@ -9,7 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { ChatsComponent } from './chats/chats.component';
-
+import { NgxElectronModule } from 'ngx-electron';
 
 @NgModule({
   declarations: [
@@ -22,7 +22,8 @@ import { ChatsComponent } from './chats/chats.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxElectronModule
   ],
   providers: [
     ChatService,

@@ -1,10 +1,11 @@
-<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-  <a href="javascript: void(0);" class="navbar-brand col-sm-3 col-md-2 mr-0">{{username}}</a>
-  <ul class="navbar-nav px-3">
-    <li class="nav-item text-nowrap">
-      <a href="javascript: void(0);" class="nav-link" (click)="logoutUser()">Sign out</a>
-    </li>
-  </ul>
+<nav class="navbar navbar-dark bg-danger fixed-top" style="-webkit-app-region: drag;">
+    <ul class="navbar-nav mr-auto" style="font-weight: bold; color: #ffffff;">
+        CHAT APP
+    </ul>
+    <form class="form-inline my-2 my-lg-0" style="-webkit-app-region: no-drag">
+        <i style="margin-right: 10px;" (click)="minimize()" class="fas fa-minus text-white bg-success fa-border fa-lg"></i>
+        <i class="fas fa-times fa-border text-white bg-success fa-lg" (click)="close()"></i>
+    </form>
 </nav>
 <div class="container-fluid">
   <div class="row">
@@ -12,18 +13,20 @@
       <div class="sidebar-sticky">
         <ul class="nav flex-column">
           <li class="nav-item" (click)="changeRoom('community')" style="text-align: center;">
-            <a href="javascript: void(0);" class="nav-link active" style="font-size: 15px;">
+            <a class="nav-link active" href="javascript: void(0);" style="font-size: 15px;">
               Community
             </a>
           </li>
           <li class="nav-item" *ngFor="let user of filterUsers()" (click)="changeRoom(user.username)">
-            <a href="javascript: void(0);" class="nav-link" style="font-size: 15px;">
+            <a class="nav-link" href="javascript: void(0);" style="font-size: 15px;">
               {{user.username}}
               <i *ngIf='user.is_active; else elseBlock' style="margin-left: 8px;" class="fas fa-circle text-success fa-xs"></i>
               <ng-template #elseBlock>
                 <i class="fas fa-circle text-secondary fa-xs" style="margin-left: 8px;"></i>
               </ng-template>
-              <span class="badge badge-pill badge-primary" style="margin-left: 8px; position: absolute; margin-top: 2px;">4</span>
+              <!-- <span class="badge badge-pill badge-primary" style="margin-left: 8px; position: absolute; margin-top: 2px;">
+                4
+              </span> -->
               <img *ngIf='user.is_typing' src="https://mittalhimanshu151.000webhostapp.com/Images/typing.gif" alt=""
                 class="rounded d-none d-sm-block" width="35" height="35" style="margin-top: -9px; float: right;">
             </a>
@@ -31,22 +34,28 @@
         </ul>
       </div>
     </nav>
-    <img *ngIf="isLoading; else loadingComplete" src="assets/gifs/cube.gif">
-    <ng-template #loadingComplete>
-      <main role="main" class="col-md-9 ml-sm-auto px-4 col-sm-9 col-lg-10" style="height: 100vh;">
-        <h2 style="margin-top: 11px;" class="text-center">
-          {{room}}
-          <div style="font-size: 11px; width: 90px; float: right;" class="text-success">
-            Total Online : 24
+    <main role="main" class="col-md-9 px-4 col-sm-9 col-lg-10 pr-null pl-null ml-sm-auto" style="height: 100vh;">
+      <img width="92px" height="92px" *ngIf="isLoading; else loadingComplete" style="display:block; margin-left: 35vw; margin-top: 35vh;"
+        src="assets/gifs/cube.gif">
+      <ng-template #loadingComplete>
+        <h2 class="text-center">
+          <div style="font-size: 19px; float: left;" class="text-success">
+            <span class="text-black-50">You:</span> {{username}}
           </div>
+          {{room}}
+          <div style="font-size: 12px; width: 100px; margin-top: -11px;" class="text-success">
+            Total Online : {{totalOnline}}
+          </div>
+          <a href="javascript: void(0);" (click)="logoutUser()" style="text-decoration: none; float: right; font-size: 15px; position: absolute; right: 35px; top: 49px; border-radius: 10px; padding: 5px;"
+            class="border border-success text-primary">SIGN OUT
+          </a>
         </h2>
-        <div class="my-3 p-3 bg-white rounded box-shadow">
+        <div class="my-3 bg-white rounded box-shadow pr-null pb-null ">
           <div class="media text-muted pt-3" *ngFor="let message of messages">
-            <img src="http://chittagongit.com/images/avatar-icon-images/avatar-icon-images-4.jpg" alt="" class="mr-2 rounded"
+            <img src="https://mittalhimanshu151.000webhostapp.com/Images/avatar-icon-images-4.jpg" alt="" class="mr-2 rounded"
               width="32" height="32" />
             <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-              <strong class="d-block text-gray-dark">
-                {{message.user.username}}
+              <strong class="d-block text-gray-dark">{{message.user.username}}
                 <span style="float: right;">
                   {{message.created_at}}
                 </span>
@@ -62,11 +71,11 @@
                 class="form-control" placeholder="Type Here" />
             </div>
             <div>
-              <input class="btn bg-success btn-success" type="submit" (click)="sendMessage()" value="Send" />
+              <input class="btn bg-success btn-success" (click)="sendMessage()" type="submit" value="Send" />
             </div>
           </div>
         </form>
-      </main>
-    </ng-template>
+      </ng-template>
+    </main>
   </div>
 </div>
