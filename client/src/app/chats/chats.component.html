@@ -24,9 +24,9 @@
               <ng-template #elseBlock>
                 <i class="fas fa-circle text-secondary fa-xs" style="margin-left: 8px;"></i>
               </ng-template>
-              <!-- <span class="badge badge-pill badge-primary" style="margin-left: 8px; position: absolute; margin-top: 2px;">
-                4
-              </span> -->
+              <span *ngIf="countUnread[user.username] && countUnread[user.username] != 0" class="badge badge-pill badge-primary" style="margin-left: 8px; position: absolute; margin-top: 2px;">
+                {{countUnread[user.username]}}
+              </span>
               <img *ngIf='user.is_typing' src="https://mittalhimanshu151.000webhostapp.com/Images/typing.gif" alt=""
                 class="rounded d-none d-sm-block" width="35" height="35" style="margin-top: -9px; float: right;">
             </a>

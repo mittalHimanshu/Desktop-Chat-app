@@ -18,6 +18,7 @@ export class ChatsComponent implements OnInit {
   private room: string = 'community'
   private isLoading: boolean
   private totalOnline: number = 0
+  private countUnread = {'community': 0}
 
   constructor(
     private _auth: AuthService,
@@ -48,9 +49,18 @@ export class ChatsComponent implements OnInit {
     })
 
     this._chatService.getMessage().subscribe(message => {
+
+      // this.showNotification(message.user.username)
+
+      if(!this.countUnread[`${message.user.username}`]) this.countUnread[`${message.user.username}`] = 0
+
       if ((message.room == 'community' && this.room == 'community')
         || (message.room == this.username && message.user.username == this.room)
         || message.room == this.room) this.messages.push(message)
+
+      if(this.room != message.room)
+        this.countUnread[`${message.user.username}`] += 1
+
     })
 
   }
@@ -63,9 +73,14 @@ export class ChatsComponent implements OnInit {
     this._electron.ipcRenderer.send('minimize-window')
   }
 
+  showNotification = username => {
+    this._electron.ipcRenderer.send('show-notification', username)
+  }
+
   changeRoom = value => {
     if (value == this.room) return
     this.room = value
+    if(this.countUnread[this.room]) this.countUnread[this.room] = 0
     this.isLoading = true
     if (this.room != 'community') {
       this._chatService.setPrivateRoom({

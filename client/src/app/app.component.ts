@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ElectronService } from 'ngx-electron';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,10 @@ import { Component } from '@angular/core';
 
 export class AppComponent {
 
-  constructor() { }
+  constructor(private _electron: ElectronService) { }
+
+  close = () => {
+    this._electron.ipcRenderer.send('close-window')
+  }
 
 }
