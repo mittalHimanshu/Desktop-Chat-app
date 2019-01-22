@@ -9,6 +9,7 @@ import { ElectronService } from 'ngx-electron';
   templateUrl: './chats.component.html',
   styleUrls: ['./chats.component.css']
 })
+
 export class ChatsComponent implements OnInit {
 
   private message: string = ''
@@ -18,7 +19,8 @@ export class ChatsComponent implements OnInit {
   private room: string = 'community'
   private isLoading: boolean
   private totalOnline: number = 0
-  private countUnread = {'community': 0}
+  private countUnread = { 'community': 0 }
+  private scrollToDown: boolean = false
 
   constructor(
     private _auth: AuthService,
@@ -31,6 +33,8 @@ export class ChatsComponent implements OnInit {
   ngOnInit() {
 
     this.isLoading = true
+
+    window.addEventListener('scroll', this.scroll, true)
 
     this.route.queryParams.subscribe(queryParams => {
       this.username = queryParams['username']
@@ -52,17 +56,30 @@ export class ChatsComponent implements OnInit {
 
       // this.showNotification(message.user.username)
 
-      if(!this.countUnread[`${message.user.username}`]) this.countUnread[`${message.user.username}`] = 0
+      if (!this.countUnread[`${message.user.username}`]) this.countUnread[`${message.user.username}`] = 0
 
       if ((message.room == 'community' && this.room == 'community')
         || (message.room == this.username && message.user.username == this.room)
         || message.room == this.room) this.messages.push(message)
 
-      if(this.room != message.room)
+      if (message.room == this.username && this.room != message.user.username)
         this.countUnread[`${message.user.username}`] += 1
 
     })
 
+  }
+
+  scroll = (event: any) => {
+    if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
+      this.scrollToDown = false
+    }
+    else
+      this.scrollToDown = true
+  }
+
+  scrollToBottom = () => {
+    window.scrollTo({ top: document.body.scrollHeight , behavior: "smooth"})
+    // this.scrollToDown = true
   }
 
   close = () => {
@@ -80,7 +97,7 @@ export class ChatsComponent implements OnInit {
   changeRoom = value => {
     if (value == this.room) return
     this.room = value
-    if(this.countUnread[this.room]) this.countUnread[this.room] = 0
+    if (this.countUnread[this.room]) this.countUnread[this.room] = 0
     this.isLoading = true
     if (this.room != 'community') {
       this._chatService.setPrivateRoom({

@@ -1,8 +1,24 @@
+<div *ngIf="isError" class="alert" style="position: absolute; 
+    left: calc(50% - 250px);
+    top: 15vh; width: 500px; text-align: center; font-size: 1rem; background: #FFDF00; padding: 10px;">
+    Incorrect Username or Password
+    <span class="closebtn" onclick="this.parentElement.style.display='none';"
+        style="margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;"    
+    >&times;</span>
+</div>
+
 <div class="text-center" style="margin-top: 25vh">
     <form class="form-signin">
         <h1 class="h3 mb-3 font-weight-normal">Login</h1>
-        <input style="width: 300px;" type="text" [(ngModel)]="loginData.username" name="username" class="form-control" placeholder="Username"
-            required autofocus>
+        <input (focus)="removeError()" style="width: 300px;" type="text" [(ngModel)]="loginData.username" name="username"
+            class="form-control" placeholder="Username" required autofocus>
         <input type="password" [(ngModel)]="loginData.password" name="password" class="form-control" placeholder="Password"
             required style="margin-top: 10px;">
         <button class="btn btn-lg btn-primary btn-block" type="submit" (click)="loginUser()">Sign in</button>

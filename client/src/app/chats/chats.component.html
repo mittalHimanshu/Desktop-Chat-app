@@ -1,3 +1,4 @@
+<img *ngIf="scrollToDown" (click)="scrollToBottom()" src="/assets/images/arrow-down.png" width="30px" height="30px" style="z-index: 1000; position: fixed; right: 20px; bottom: 10px;">
 <nav class="navbar navbar-dark bg-danger fixed-top" style="-webkit-app-region: drag;">
     <ul class="navbar-nav mr-auto" style="font-weight: bold; color: #ffffff;">
         CHAT APP
@@ -50,7 +51,7 @@
             class="border border-success text-primary">SIGN OUT
           </a>
         </h2>
-        <div class="my-3 bg-white rounded box-shadow pr-null pb-null ">
+        <div class="my-3 bg-white rounded box-shadow pr-null pb-null" style="margin-bottom: 50px !important;">
           <div class="media text-muted pt-3" *ngFor="let message of messages">
             <img src="https://mittalhimanshu151.000webhostapp.com/Images/avatar-icon-images-4.jpg" alt="" class="mr-2 rounded"
               width="32" height="32" />
@@ -64,7 +65,7 @@
             </p>
           </div>
         </div>
-        <form style="bottom: 0; position: fixed; padding: 10px; margin-bottom: 6px; border-radius: 5px;" class="col-lg-9 col-md-8 col-sm-8">
+        <form style="bottom: 0; position: fixed; border-radius: 5px;" class="col-lg-9 col-md-8 col-sm-8">
           <div class="form-row">
             <div class="col">
               <input [(ngModel)]="message" name="message" (input)="handleTyping()" (blur)="onBlurMethod()" type="text"

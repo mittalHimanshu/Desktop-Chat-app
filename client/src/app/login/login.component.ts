@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -11,16 +12,20 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   private loginData = { username: '', password: '' }
+  private isError: boolean = false
 
   constructor(private _auth: AuthService, private _router: Router) { }
 
   ngOnInit() {
+
+    this.isError = false
+
     this._auth.isLoggedIn().subscribe(
       (payload: { "username": '' }) => {
         const { username } = payload
         return this._router.navigate(['/chats'], { queryParams: { username } })
       },
-      err => console.log(err)
+      err => console.log(err.message)
     )
   }
 
@@ -31,8 +36,16 @@ export class LoginComponent implements OnInit {
           const { username } = payload
           return this._router.navigate(['/chats'], { queryParams: { username } })
         },
-        err => console.log(err)
+        err => {
+          if (err instanceof HttpErrorResponse){
+            this.isError = true
+          }
+        }
       )
+  }
+
+  removeError = () => {
+    this.isError = false
   }
 
   navigateToRegister = () => {
