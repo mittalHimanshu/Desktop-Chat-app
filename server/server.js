@@ -21,10 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use('/auth', authRoutes)
 app.use('/messages', messageRoutes)
-// app.get('*', (req, res) => {
-//     let url = path.resolve(__dirname, '../client/dist', 'client', 'index.html')
-//     res.sendFile(url)
-// })
+app.get('/' , (req, res) => res.send('Server is working....'))
 
 require('./config/passport')(passport)
 
@@ -33,7 +30,7 @@ mongoose.connect(db, { useNewUrlParser: true })
     .then(console.log('MongoDB connected'))
     .catch(err => console.log('Error ', err.message))
 
-const port = process.env.port || 5000
+const port = process.env.PORT || 5000
 
 const server = app.listen(port, console.log('Server Started'))
 

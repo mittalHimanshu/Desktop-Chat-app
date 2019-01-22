@@ -1,20 +1,12 @@
 {
     "/auth": {
-        "target": {
-            "host": "localhost",
-            "protocol": "http:",
-            "port": 5000
-        },
+        "target": "https://fast-journey-31359.herokuapp.com",
         "secure": false,
         "changeOrigin": true,
         "logLevel": "info"
     },
     "/messages": {
-        "target": {
-            "host": "localhost",
-            "protocol": "http:",
-            "port": 5000
-        },
+        "target": "https://fast-journey-31359.herokuapp.com",
         "secure": false,
         "changeOrigin": true,
         "logLevel": "info"

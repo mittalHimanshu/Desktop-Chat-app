@@ -43,8 +43,8 @@ module.exports.createRoom = (roomName, cb) => {
                     _id: mongoose.Types.ObjectId(),
                     roomName
                 }).save().then(
-                    room => cb(room.roomName)
-                )
+                    room => { if(cb) return cb(room.roomName) }
+                ).catch(err => console.log(err))
             }
         })
 }

@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class ChatService {
 
   private socket: SocketIOClient.Socket
-  private _url: string = 'http://localhost:5000'
+  private _url: string = 'https://fast-journey-31359.herokuapp.com'
 
   constructor(private _http: HttpClient) {
     this.socket = io(this._url)
