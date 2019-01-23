@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from './../auth.service';
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-chats',
@@ -13,6 +14,7 @@ import { ElectronService } from 'ngx-electron';
 export class ChatsComponent implements OnInit {
 
   private message: string = ''
+  private newMessage: any
   private messages: any
   private username: string
   private users: any
@@ -35,6 +37,13 @@ export class ChatsComponent implements OnInit {
     this.isLoading = true
 
     window.addEventListener('scroll', this.scroll, true)
+    
+    // this._electron.ipcRenderer.on('receive-notification', () => {
+    //   if(this.newMessage.user.username != this.username)
+    //     this.showNotification(this.newMessage.user.username)
+    // })
+
+    this._electron.ipcRenderer.send('register-blur')
 
     this.route.queryParams.subscribe(queryParams => {
       this.username = queryParams['username']
@@ -54,7 +63,7 @@ export class ChatsComponent implements OnInit {
 
     this._chatService.getMessage().subscribe(message => {
 
-      // this.showNotification(message.user.username)
+      this.newMessage = message
 
       if (!this.countUnread[`${message.user.username}`]) this.countUnread[`${message.user.username}`] = 0
 
@@ -62,8 +71,10 @@ export class ChatsComponent implements OnInit {
         || (message.room == this.username && message.user.username == this.room)
         || message.room == this.room) this.messages.push(message)
 
-      if (message.room == this.username && this.room != message.user.username)
+      if (message.room == this.username && this.room != message.user.username){
         this.countUnread[`${message.user.username}`] += 1
+        this.showNotification(this.newMessage.user.username)
+      }
 
     })
 
@@ -79,7 +90,6 @@ export class ChatsComponent implements OnInit {
 
   scrollToBottom = () => {
     window.scrollTo({ top: document.body.scrollHeight , behavior: "smooth"})
-    // this.scrollToDown = true
   }
 
   close = () => {
@@ -126,6 +136,7 @@ export class ChatsComponent implements OnInit {
     this._chatService.handleTyping(this.username, false)
     this._chatService.sendMessage(this.username, this.room, this.message)
     this.message = ''
+    this.scrollToBottom()
   }
 
   filterUsers = () => {

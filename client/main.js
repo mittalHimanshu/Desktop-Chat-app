@@ -7,8 +7,7 @@ function createWindow() {
 
     mainWindow = new BrowserWindow({
         width: 1000,
-        height: 600,
-        frame: false
+        height: 600
     })
 
     mainWindow.loadURL(
@@ -30,6 +29,12 @@ ipcMain.on('show-notification', (event, username) => {
     })
     notifier.on('click', (notifierObject, options) => {
         mainWindow.show()
+    })
+})
+
+ipcMain.on('register-blur', event => {
+    app.on('browser-window-blur', () => {
+        event.sender.send('receive-notification')
     })
 })
 

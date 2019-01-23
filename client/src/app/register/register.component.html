@@ -1,7 +1,23 @@
+<div *ngIf="isError" class="alert" style="position: absolute; 
+    left: calc(50% - 250px);
+    top: 15vh; width: 500px; text-align: center; font-size: 1rem; background: #FFDF00; padding: 10px;">
+    Username taken !!!
+    <span class="closebtn" onclick="this.parentElement.style.display='none';"
+        style="margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;"    
+    >&times;</span>
+</div>
+
 <div class="text-center" style="margin-top: 25vh">
     <form class="form-signin">
         <h1 class="h3 mb-3 font-weight-normal">Register</h1>
-        <input style="width: 300px;" type="text" [(ngModel)]="registerData.username" name="username" class="form-control" placeholder="Username"
+        <input (focus)="removeError()" style="width: 300px;" type="text" [(ngModel)]="registerData.username" name="username" class="form-control" placeholder="Username"
             required autofocus>
         <input type="password" [(ngModel)]="registerData.password" name="password" class="form-control" placeholder="Password"
             required style="margin-top: 10px;">

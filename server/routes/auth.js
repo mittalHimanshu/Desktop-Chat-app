@@ -4,6 +4,7 @@ const { ensureAuthenticated } = require('../config/auth')
 const passport = require('passport')
 const User = require('../models/user')
 const mongoose = require('mongoose')
+const {checkUsername} = require('../middleware')
 
 router.get('/isLoggedIn', ensureAuthenticated)
 
@@ -26,8 +27,9 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
     return res.json({ "username": req.user.username })
 })
 
-router.post('/register', (req, res) => {
+router.post('/register', checkUsername, (req, res) => {
     req.body['_id'] = new mongoose.Types.ObjectId()
+    console.log(req.body)
     User.create(req.body, (err, user) => {
         if (err) return res.status(500).json({ "error": err.message })
         req.login(user, err => {
