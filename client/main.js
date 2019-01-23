@@ -1,3 +1,8 @@
+const setupEvents = require('./installers/setupEvents')
+if (setupEvents.handleSquirrelEvent()) {
+    return;
+}
+
 const { app, BrowserWindow, ipcMain } = require('electron')
 const notifier = require('node-notifier')
 const isDev = require('electron-is-dev')
@@ -7,13 +12,12 @@ function createWindow() {
 
     mainWindow = new BrowserWindow({
         width: 1000,
-        height: 600
+        height: 600,
+        frame: false
     })
 
     mainWindow.loadURL(
-        isDev
-            ? 'http://localhost:4200'
-            : `file://${__dirname}/dist/YouTubeStats-app/index.html`,
+       `file://${__dirname}/dist/client/index.html`,
     )
 
     mainWindow.on('closed', function () {
@@ -29,12 +33,6 @@ ipcMain.on('show-notification', (event, username) => {
     })
     notifier.on('click', (notifierObject, options) => {
         mainWindow.show()
-    })
-})
-
-ipcMain.on('register-blur', event => {
-    app.on('browser-window-blur', () => {
-        event.sender.send('receive-notification')
     })
 })
 

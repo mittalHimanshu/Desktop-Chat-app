@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "main": "main.js",
   "scripts": {
     "ng": "ng",
@@ -8,7 +8,11 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64  --prune=true --out=release-builds",
+    "package-win": "electron-packager . ChatApp --overwrite --asar --platform=win32 --arch=ia32  --prune=true --out=release-builds --version-string.ProductName=\"ChatApp\"",
+    "package-linux": "electron-packager . ChatApp --overwrite --asar --platform=linux --arch=x64 --prune=true --out=release-builds",
+    "create-installer-win": "node installers/windows/createinstaller.js"
   },
   "private": true,
   "dependencies": {
@@ -22,6 +26,7 @@
     "@angular/router": "~7.1.0",
     "core-js": "^2.5.4",
     "electron-is-dev": "^1.0.1",
+    "electron-squirrel-startup": "^1.0.0",
     "ngx-electron": "^2.1.1",
     "node-notifier": "^5.3.0",
     "rxjs": "~6.3.3",
@@ -40,6 +45,7 @@
     "@types/socket.io-client": "^1.4.32",
     "codelyzer": "~4.5.0",
     "electron": "^4.0.1",
+    "electron-winstaller": "^2.7.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.1.1",

@@ -25,7 +25,7 @@ export class ChatService {
   public getChangedUsers = () => {
     return Observable.create(observer => {
       this.socket.on('users-changed', () => {
-        this._http.get('/auth/users').subscribe(
+        this._http.get(`${this._url}/auth/users`).subscribe(
           users => observer.next(users)
         )
       })
@@ -37,7 +37,7 @@ export class ChatService {
   }
   
   public getInitialChats = (room, username) => 
-    this._http.get(`/messages/${username}/${room}`)
+    this._http.get(`${this._url}/messages/${username}/${room}`)
 
   public setPrivateRoom = payload => {
     this.socket.emit('set-private-room', payload)

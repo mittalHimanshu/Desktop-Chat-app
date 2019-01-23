@@ -11,8 +11,8 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
 
-  private registerData = { username: '', password: '' }
-  private isError: boolean
+  public registerData = { username: '', password: '' }
+  public isError: boolean
 
   constructor(private _auth: AuthService, private _router: Router) { }
 

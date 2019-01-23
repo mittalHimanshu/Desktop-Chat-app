@@ -11,8 +11,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class LoginComponent implements OnInit {
 
-  private loginData = { username: '', password: '' }
-  private isError: boolean = false
+  public loginData = { username: '', password: '' }
+  public isError: boolean = false
+  private errorText: string
 
   constructor(private _auth: AuthService, private _router: Router) { }
 
@@ -37,8 +38,13 @@ export class LoginComponent implements OnInit {
           return this._router.navigate(['/chats'], { queryParams: { username } })
         },
         err => {
-          if (err instanceof HttpErrorResponse){
-            this.isError = true
+          console.log(err.status)
+          this.isError = true
+          if(err.status == 406){
+            this.errorText = 'User already logged in'
+          }
+          else if (err instanceof HttpErrorResponse){
+            this.errorText = 'Incorrect Username or Password'
           }
         }
       )
