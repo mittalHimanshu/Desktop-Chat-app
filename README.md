@@ -16,12 +16,12 @@ A Desktop app created with `MEAN Stack`, `Electron`, `Socket.io` and auth is don
 
 * Login
 <p align="center">
-<img width="400" height="400" src="https://mittalhimanshu151.000webhostapp.com/Images/ChatApp/login.PNG" alt="login" />
+<img width="800" height="400" src="https://mittalhimanshu151.000webhostapp.com/Images/ChatApp/login.PNG" alt="login" />
 </p>
 
-*Register
+* Register
 <p align="center">
-<img width="400" height="400" src="https://mittalhimanshu151.000webhostapp.com/Images/ChatApp/register.PNG" alt="register" />
+<img width="800" height="400" src="https://mittalhimanshu151.000webhostapp.com/Images/ChatApp/register.PNG" alt="register" />
 </p>
 
 ## Working Preview
