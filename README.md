@@ -1,6 +1,6 @@
 # ChatApp
 
-A Desktop app created with `MEAN Stack`, `Electron` and `Socket.io` and auth is done by `Passport.js`
+A Desktop app created with `MEAN Stack`, `Electron`, `Socket.io` and auth is done by `Passport.js`
 
 ## Packaged app
 
@@ -12,15 +12,19 @@ A Desktop app created with `MEAN Stack`, `Electron` and `Socket.io` and auth is 
 * Linux - Coming soon...
 * Mac - Coming soon..
 
-## Preview
+## Screenshots
+
+* Login
 <p align="center">
-<img src="https://mittalhimanshu151.000webhostapp.com/Images/ChatApp/login.PNG" alt="login" />
+<img width="400" height="400" src="https://mittalhimanshu151.000webhostapp.com/Images/ChatApp/login.PNG" alt="login" />
 </p>
 
+*Register
 <p align="center">
-<img src="https://mittalhimanshu151.000webhostapp.com/Images/ChatApp/register.PNG" alt="register" />
+<img width="400" height="400" src="https://mittalhimanshu151.000webhostapp.com/Images/ChatApp/register.PNG" alt="register" />
 </p>
 
+## Working Preview
 <p align="center">
 <img src="https://mittalhimanshu151.000webhostapp.com/Gifs/ChatApp.gif" alt="chat-app" />
 </p>
