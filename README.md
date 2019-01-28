@@ -26,5 +26,5 @@ A Desktop app created with `MEAN Stack`, `Electron`, `Socket.io` and auth is don
 
 ## Working Preview
 <p align="center">
-<img src="https://mittalhimanshu151.000webhostapp.com/Gifs/Chat-App.gif" alt="chat-app" />
+<img src="https://mittalhimanshu151.000webhostapp.com/Gifs/chat-app.gif" alt="chat-app" />
 </p>
